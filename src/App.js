@@ -30,23 +30,40 @@ class App extends Component {
     this.setState({
       items: updatedItems,
       item: '',
-      uuid: this.state.id,
+      id: uuid(),
       editItem: false
-    },() => console.log(this.state));
+    });
   }
     clearList = () => {
-      console.log("clear list");
-    }
+      this.setState({
+        items: []
+    })
+  }
 
-    handleEdit = (id) => {
+    handleEdit = id => {
       console.log(`handle edit ${id}`);
+      const filtered=this.state.items.filter(item => item.id !== id);
+      
+      const selected=this.state.items.find(item => item.id === id);
+      console.log(filtered, selected);
+
+      this.setState({
+        items: filtered,
+        item : selected.title,
+        id: id,
+        editItem: true
+      })
     }
 
-    handleDelete = (id) => {
+    handleDelete = id => {
       console.log(`handle delete  ${id}`);
-    }
-    
 
+      const filtered=this.state.items.filter(item => item.id !== id);
+      this.setState({
+        items: filtered
+    })
+    }
+  
 
   render(){
     
@@ -58,8 +75,9 @@ class App extends Component {
             <TodoInput item={this.state.item} handleChange={this.handleChange} 
             handleSubmit={this.handleSubmit} editItem={this.state.editItem}/>
           </div>
-            
+          <div className="col-10 mx-auto col-md-8 mt-4">
             <TodoList items={this.state.items} clearList={this.clearList} handleDelete={this.handleDelete} handleEdit={this.handleEdit}/>
+          </div>
           </div>
         </div>
       
